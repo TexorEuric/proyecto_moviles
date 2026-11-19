@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:proyecto_moviles/screens/alumno/mapa_screen.dart';
+import 'package:proyecto_moviles/screens/docente/docente_home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -38,29 +40,14 @@ class _LoginScreenState extends State<LoginScreen> {
     await Future.delayed(const Duration(milliseconds: 1200));
 
     if (!mounted) return;
-
-    setState(() {
-      _isLoading = false;
-    });
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            const Icon(Icons.check_circle_outline, color: Colors.white),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                '¡Bienvenido, ${_userController.text.trim()}! Acceso concedido.',
-              ),
-            ),
-          ],
+      setState(() => _isLoading = false);
+      // Autenticación simulada: usuarios que empiezan con "prof" entran como docente
+      final esDocente = _userController.text.trim().toLowerCase().startsWith('prof');
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (_) => esDocente ? const DocenteHomeScreen() : const MapaScreen(),
         ),
-        backgroundColor: Colors.teal.shade700,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      ),
-    );
+      );
   }
 
   void _showHelpDialog() {
